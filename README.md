@@ -3,4 +3,4 @@
 * .NET Web API
 * REST
 * Entity framework(SQLite)
-* MVVM
+* MVVM(CommunityToolkit)
