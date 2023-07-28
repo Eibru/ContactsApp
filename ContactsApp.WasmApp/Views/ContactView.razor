@@ -1,0 +1,45 @@
+﻿@page "/contacts/{id:int}"
+@inject ContactViewModel _viewModel
+@implements IDisposable
+
+<MudStack>
+    @if (_viewModel.Contact != null)
+    {
+        <MudTextField Required @bind-Value="_viewModel.Contact.FirstName" Label="First name" />
+        <MudTextField @bind-Value="_viewModel.Contact.MiddleName" Label="Middle name" />
+        <MudTextField @bind-Value="_viewModel.Contact.LastName" Label="Last name" />
+        <MudTextField @bind-Value="_viewModel.Contact.Phone" Label="Phone" />
+        <MudTextField @bind-Value="_viewModel.Contact.Email" Label="Email" />
+    }
+    <MudButton Command="_viewModel.SaveCommand" StartIcon="@Icons.Material.Filled.Save" Color="Color.Success">Save</MudButton>
+    <MudButton Command="_viewModel.DeleteCommand" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error">Delete</MudButton>
+    <MudButton Command="_viewModel.CloseCommand" StartIcon="@Icons.Material.Filled.Close" Color="Color.Default">Close</MudButton>
+</MudStack>
+
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _viewModel.PropertyChanged += PropertyChanged;
+
+        if (Id > 0)
+        {
+            await _viewModel.LoadContact(Id);
+        }
+    }
+
+    private void PropertyChanged(object sender, EventArgs args)
+    {
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        _viewModel.PropertyChanged -= PropertyChanged;
+    }
+}
+

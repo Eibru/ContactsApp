@@ -1,0 +1,31 @@
+﻿@page "/contacts"
+@inject ContactListViewModel _viewModel
+@implements IDisposable
+
+<MudTable Items="_viewModel.Contacts">
+    <ToolBarContent>
+        <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Success" Href="/contacts/0"/>
+    </ToolBarContent>
+    <RowTemplate>
+        <MudTd>@context.Name</MudTd>
+        <MudTd>
+            <MudLink Href="@("/contacts/"+context.Id.ToString())">View</MudLink>
+        </MudTd>
+    </RowTemplate>
+</MudTable>
+
+@code {
+    protected override async Task OnInitializedAsync(){
+        _viewModel.PropertyChanged += PropertyChanged;
+        await _viewModel.Load();
+    }
+
+    private void PropertyChanged(object sender, EventArgs args){
+        StateHasChanged();
+    }
+
+    public void Dispose(){
+        _viewModel.PropertyChanged -= PropertyChanged;
+    }
+}
+
