@@ -1,4 +1,4 @@
-##Contacts application
+## Contacts application
 * Backend - ASP.NET web API
 * Frontend - Bazor WASM
 
