@@ -1,5 +1,5 @@
 # Contacts application
-* Backend - ASP.NET web API
+* Backend - ASP.NET Core web API
 * Frontend - Bazor WASM
 
 ### Showcases
