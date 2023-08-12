@@ -1,54 +1,46 @@
-﻿using System;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ContactsApp.Shared.Models;
 using ContactsApp.Shared.Services;
 
-namespace ContactsApp.Shared.ViewModels
-{
-	public partial class ContactListViewModel : ObservableObject
-	{
-        private readonly IApiClient _apiClient;
-        private readonly INavigationService _navigationService;
-        private readonly IAlertService _alertService;
+namespace ContactsApp.Shared.ViewModels;
 
-        [ObservableProperty]
-        private List<Contact> _contacts = new List<Contact>();
+public partial class ContactListViewModel : ObservableObject {
+    private readonly IApiClient _apiClient;
+    private readonly INavigationService _navigationService;
+    private readonly IAlertService _alertService;
 
-        [ObservableProperty]
-        private bool _loading;
+    [ObservableProperty]
+    private List<Contact> _contacts = new List<Contact>();
 
-        public ContactListViewModel(IApiClient apiClient, INavigationService navigationService, IAlertService alertService){
-            _apiClient = apiClient;
-            _navigationService = navigationService;
-            _alertService = alertService;
-        }
+    [ObservableProperty]
+    private bool _loading;
 
-        public async Task Load() {
-            Loading = true;
+    public ContactListViewModel(IApiClient apiClient, INavigationService navigationService, IAlertService alertService) {
+        _apiClient = apiClient;
+        _navigationService = navigationService;
+        _alertService = alertService;
+    }
 
-            try
-            {
-                Contacts = await _apiClient.GetContacts();
-            } catch(Exception ex)
-            {
-                await _alertService.ShowError("Error loading contacts", ex.Message);
-            }
-            finally
-            {
-                Loading = false;
-            }
-        }
+    public async Task Load() {
+        Loading = true;
 
-        [RelayCommand]
-        private async Task CreateContact(){
-
-        }
-
-        [RelayCommand]
-        private async Task ViewContact(int id){
-            await _navigationService.GoToContact(id);
+        try {
+            Contacts = await _apiClient.GetContacts();
+        } catch(Exception ex) {
+            await _alertService.ShowError("Error loading contacts", ex.Message);
+        } finally {
+            Loading = false;
         }
     }
-}
 
+    [RelayCommand]
+    private async Task CreateContact() {
+
+    }
+
+    [RelayCommand]
+    private async Task ViewContact(int id) {
+        await _navigationService.GoToContact(id);
+    }
+}

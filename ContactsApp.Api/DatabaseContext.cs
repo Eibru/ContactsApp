@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ContactsApp.Api;
 
-public class DatabaseContext : DbContext{
-	public DbSet<Contact> Contacts { get; set; }
+public class DatabaseContext : DbContext {
+    public DbSet<Contact> Contacts { get; set; }
 
-	public string DbPath { get; }
+    public string DbPath { get; }
 
-	public DatabaseContext(){
+    public DatabaseContext() {
         var folder = Environment.SpecialFolder.LocalApplicationData;
         var path = Environment.GetFolderPath(folder);
         DbPath = Path.Join(path, "ContactsAppDatabase.db");
@@ -18,7 +18,7 @@ public class DatabaseContext : DbContext{
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     => options.UseSqlite($"Data Source={DbPath}");
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder){
+    protected override void OnModelCreating(ModelBuilder modelBuilder) {
         modelBuilder.Entity<Contact>().HasKey(x => x.Id);
         modelBuilder.Entity<Contact>().HasMany(x => x.EmailAddresses).WithOne();
         modelBuilder.Entity<Contact>().HasMany(x => x.PhoneNumbers).WithOne();
