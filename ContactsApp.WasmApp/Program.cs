@@ -16,7 +16,7 @@ builder.Services.AddMudServices();
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5050") });
 
 builder.Services.AddScoped<ContactListViewModel>();
-builder.Services.AddScoped<ContactViewModel>();
+builder.Services.AddTransient<ContactViewModel>();
 builder.Services.AddScoped<INavigationService, NavigationService>();
 builder.Services.AddScoped<IAlertService, AlertService>();
 builder.Services.AddScoped<IApiClient, ApiClient>();

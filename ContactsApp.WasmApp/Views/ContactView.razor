@@ -3,14 +3,64 @@
 @implements IDisposable
 
 <MudStack>
-    @if (_viewModel.Contact != null)
-    {
-        <MudTextField Required @bind-Value="_viewModel.Contact.FirstName" Label="First name" />
-        <MudTextField @bind-Value="_viewModel.Contact.MiddleName" Label="Middle name" />
-        <MudTextField @bind-Value="_viewModel.Contact.LastName" Label="Last name" />
-        <MudTextField @bind-Value="_viewModel.Contact.Phone" Label="Phone" />
-        <MudTextField @bind-Value="_viewModel.Contact.Email" Label="Email" />
+    @if (_viewModel.Contact != null){
+        <MudTextField Variant="Variant.Outlined" Required @bind-Value="_viewModel.Contact.FirstName" Label="First name" />
+        <MudTextField Variant="Variant.Outlined" @bind-Value="_viewModel.Contact.MiddleName" Label="Middle name" />
+        <MudTextField Variant="Variant.Outlined" @bind-Value="_viewModel.Contact.LastName" Label="Last name" />
     }
+
+    <MudDataGrid Elevation="0" Dense Outlined ReadOnly="false" Items="_viewModel.Contact.PhoneNumbers" EditMode="DataGridEditMode.Form" EditTrigger="DataGridEditTrigger.Manual">
+        <ToolBarContent>
+            <MudIconButton Color="Color.Success" Icon="@Icons.Material.Filled.Add" Command="_viewModel.AddPhoneCommand" />
+        </ToolBarContent>
+        <NoRecordsContent>
+            No data
+        </NoRecordsContent>
+        <Columns>
+            <PropertyColumn Property="x => x.PhoneNumber" />
+            <PropertyColumn Property="x => x.PhoneType">
+                <EditTemplate>
+                    <MudSelect Variant="Variant.Outlined" @bind-Value="context.Item.PhoneType" Label="Type">
+                        @foreach(PhoneType item in Enum.GetValues(typeof(PhoneType))) {
+                            <MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+                        }
+                    </MudSelect>
+                </EditTemplate>
+            </PropertyColumn>
+            <TemplateColumn>
+                <CellTemplate>
+                    <MudIconButton Color="Color.Warning" Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@context.Actions.StartEditingItemAsync" />
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+    </MudDataGrid>
+
+    <MudDataGrid Elevation="0" Dense Outlined ReadOnly="false" Items="_viewModel.Contact.EmailAddresses" EditMode="DataGridEditMode.Form" EditTrigger="DataGridEditTrigger.Manual">
+        <ToolBarContent>
+            <MudIconButton Color="Color.Success" Icon="@Icons.Material.Filled.Add" Command="_viewModel.AddEmailCommand" />
+        </ToolBarContent>
+        <NoRecordsContent>
+            No data
+        </NoRecordsContent>
+        <Columns>
+            <PropertyColumn Property="x => x.EmailAddress"/>
+            <PropertyColumn Property="x => x.EmailType">
+                <EditTemplate>
+                    <MudSelect Variant="Variant.Outlined" @bind-Value="context.Item.EmailType" Label="Type">
+                        @foreach(EmailType item in Enum.GetValues(typeof(EmailType))) {
+                            <MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+                        }
+                    </MudSelect>
+                </EditTemplate>
+            </PropertyColumn>
+            <TemplateColumn>
+                <CellTemplate>
+                    <MudIconButton Color="Color.Warning" Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@context.Actions.StartEditingItemAsync" />
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+    </MudDataGrid>
+
     <MudButton Command="_viewModel.SaveCommand" StartIcon="@Icons.Material.Filled.Save" Color="Color.Success">Save</MudButton>
     <MudButton Command="_viewModel.DeleteCommand" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error">Delete</MudButton>
     <MudButton Command="_viewModel.CloseCommand" StartIcon="@Icons.Material.Filled.Close" Color="Color.Default">Close</MudButton>
@@ -22,23 +72,18 @@
     [Parameter]
     public int Id { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
+    protected override async Task OnInitializedAsync(){
         _viewModel.PropertyChanged += PropertyChanged;
 
         if (Id > 0)
-        {
             await _viewModel.LoadContact(Id);
-        }
     }
 
-    private void PropertyChanged(object sender, EventArgs args)
-    {
+    private void PropertyChanged(object sender, EventArgs args){
         StateHasChanged();
     }
 
-    public void Dispose()
-    {
+    public void Dispose(){
         _viewModel.PropertyChanged -= PropertyChanged;
     }
 }

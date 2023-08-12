@@ -4,10 +4,8 @@ using CommunityToolkit.Mvvm.Input;
 using ContactsApp.Shared.Models;
 using ContactsApp.Shared.Services;
 
-namespace ContactsApp.Shared.ViewModels
-{
-	public partial class ContactViewModel : ObservableObject
-	{
+namespace ContactsApp.Shared.ViewModels {
+	public partial class ContactViewModel : ObservableObject {
 		private readonly IApiClient _apiClient;
 		private readonly INavigationService _navigationService;
 		private readonly IAlertService _alertService;
@@ -27,15 +25,11 @@ namespace ContactsApp.Shared.ViewModels
 		public async Task LoadContact(int id) {
 			Loading = true;
 
-			try
-			{
+			try {
 				Contact = await _apiClient.GetContact(id);
-			} catch(Exception ex)
-			{
+			} catch(Exception ex) {
 				await _alertService.ShowError("Error loading contact", ex.Message);
-			}
-			finally
-			{
+			} finally {
 				Loading = false;
 			}
 		}
@@ -49,65 +43,61 @@ namespace ContactsApp.Shared.ViewModels
 		private async Task Delete() {
 			Loading = true;
 
-			try
-			{
+			try {
 				await _apiClient.DeleteContact(Contact.Id);
 				await _alertService.ShowSuccess("Contact deleted", "");
 				await _navigationService.GoToContactList();
-			} catch(Exception ex)
-			{
+			} catch(Exception ex) {
 				await _alertService.ShowError("Error deleting contact", ex.Message);
-			}
-			finally
-			{
+			} finally {
 				Loading = false;
 			}
 		}
 
 		[RelayCommand]
-		private async Task Save()
-		{
-			if (Contact.Id == 0)
+		private async Task Save() {
+			if(Contact.Id == 0)
 				await CreateContact();
 			else
 				await UpdateContact();
 		}
 
-		private async Task CreateContact() {
-            Loading = true;
+		[RelayCommand]
+		private void AddEmail() {
+			Contact.EmailAddresses.Add(new Email());
+			OnPropertyChanged(nameof(Contact.EmailAddresses));
+		}
 
-            try
-            {
-                Contact = await _apiClient.CreateContact(Contact);
+		[RelayCommand]
+		private void AddPhone() {
+			Contact.PhoneNumbers.Add(new Phone());
+			OnPropertyChanged(nameof(Contact.PhoneNumbers));
+		}
+
+		private async Task CreateContact() {
+			Loading = true;
+
+			try {
+				Contact = await _apiClient.CreateContact(Contact);
 				await _alertService.ShowSuccess("Contact created", "");
-            }
-            catch (Exception ex)
-            {
-                await _alertService.ShowError("Error updating contact", ex.Message);
-            }
-            finally
-            {
-                Loading = false;
-            }
-        }
+			} catch(Exception ex) {
+				await _alertService.ShowError("Error adding contact", ex.Message);
+			} finally {
+				Loading = false;
+			}
+		}
 
 		private async Task UpdateContact() {
-            Loading = true;
+			Loading = true;
 
-            try
-            {
-                await _apiClient.UpdateContact(Contact);
-				await _alertService.ShowSuccess("Contact updated","");
-            }
-            catch (Exception ex)
-            {
-                await _alertService.ShowError("Error updating contact", ex.Message);
-            }
-            finally
-            {
-                Loading = false;
-            }
-        }
+			try {
+				await _apiClient.UpdateContact(Contact);
+				await _alertService.ShowSuccess("Contact updated", "");
+			} catch(Exception ex) {
+				await _alertService.ShowError("Error updating contact", ex.Message);
+			} finally {
+				Loading = false;
+			}
+		}
 	}
 }
-

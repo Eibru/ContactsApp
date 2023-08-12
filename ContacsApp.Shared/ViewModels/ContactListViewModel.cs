@@ -13,7 +13,7 @@ namespace ContactsApp.Shared.ViewModels
         private readonly IAlertService _alertService;
 
         [ObservableProperty]
-        private List<Contact> _contacts;
+        private List<Contact> _contacts = new List<Contact>();
 
         [ObservableProperty]
         private bool _loading;

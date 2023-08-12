@@ -1,28 +1,26 @@
 ﻿using ContactsApp.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace ContactsApp.Api
-{
-	public class DatabaseContext : DbContext
-	{
-		public DbSet<Contact> Contacts { get; set; }
+namespace ContactsApp.Api;
 
-		public string DbPath { get; }
+public class DatabaseContext : DbContext{
+	public DbSet<Contact> Contacts { get; set; }
 
-		public DatabaseContext(){
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = Environment.GetFolderPath(folder);
-            DbPath = Path.Join(path, "ContactsAppDatabase.db");
-            Database.EnsureCreated();
-        }
+	public string DbPath { get; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-        => options.UseSqlite($"Data Source={DbPath}");
+	public DatabaseContext(){
+        var folder = Environment.SpecialFolder.LocalApplicationData;
+        var path = Environment.GetFolderPath(folder);
+        DbPath = Path.Join(path, "ContactsAppDatabase.db");
+        Database.EnsureCreated();
+    }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Contact>().HasKey(x => x.Id);
+    protected override void OnConfiguring(DbContextOptionsBuilder options)
+    => options.UseSqlite($"Data Source={DbPath}");
 
-        }
+    protected override void OnModelCreating(ModelBuilder modelBuilder){
+        modelBuilder.Entity<Contact>().HasKey(x => x.Id);
+        modelBuilder.Entity<Contact>().HasMany(x => x.EmailAddresses).WithOne();
+        modelBuilder.Entity<Contact>().HasMany(x => x.PhoneNumbers).WithOne();
     }
 }

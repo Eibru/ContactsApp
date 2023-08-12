@@ -1,4 +1,5 @@
 ﻿using ContactsApp.Shared.Models;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,7 +27,7 @@ public class ContactsController : ControllerBase
     [Route("{id}")]
     public async Task<IActionResult> GetAsync(int id)
     {
-        var item = await _databaseContext.Contacts.FindAsync(id);
+        var item = await _databaseContext.Contacts.Include(x => x.PhoneNumbers).Include(x => x.EmailAddresses).FirstOrDefaultAsync(x => x.Id == id);
 
         if (item == null)
             return NotFound();

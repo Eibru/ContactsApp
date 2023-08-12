@@ -11,23 +11,26 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DatabaseContext>();
 
-builder.Services.AddCors(options =>
-{
+builder.Services.AddCors(options => {
     options.AddDefaultPolicy(
-        policy =>
-        {
+        policy => {
             policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
         });
 });
 
+builder.Services.AddProblemDetails();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+if(app.Environment.IsDevelopment()) {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseExceptionHandler();
+app.UseStatusCodePages();
+app.UseDeveloperExceptionPage();
 
 app.UseHttpsRedirection();
 
@@ -38,4 +41,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
