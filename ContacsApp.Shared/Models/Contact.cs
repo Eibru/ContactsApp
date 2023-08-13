@@ -1,13 +1,33 @@
-﻿namespace ContactsApp.Shared.Models; 
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Collections.ObjectModel;
 
-public class Contact {
+namespace ContactsApp.Shared.Models; 
+
+public partial class Contact : ObservableObject {
+    public Contact() {
+        EmailAddresses = new ObservableCollection<Email>();
+        PhoneNumbers = new ObservableCollection<Phone>();
+    }
+
 	public int Id { get; set; }
-	public string FirstName { get; set; }
-	public string? MiddleName { get; set; }
-	public string? LastName { get; set; }
 
-	public virtual ICollection<Email> EmailAddresses { get; set; } = new List<Email>();
-	public virtual ICollection<Phone> PhoneNumbers { get; set; } = new List<Phone>();
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(Name))]
+    private string _firstName;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(Name))]
+    private string? _middleName;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(Name))]
+    private string? _lastName;
+
+    [ObservableProperty]
+    private ObservableCollection<Email> _emailAddresses;
+
+    [ObservableProperty]
+    private ObservableCollection<Phone> _phoneNumbers;
 
 	public string Name => FirstName
 		+ (!string.IsNullOrEmpty(MiddleName) ? " " + MiddleName : "")

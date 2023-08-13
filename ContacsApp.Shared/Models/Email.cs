@@ -1,10 +1,16 @@
-﻿namespace ContactsApp.Shared.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-public class Email {
+namespace ContactsApp.Shared.Models;
+
+public partial class Email : ObservableObject{
     public int Id { get; set; }
-    public string EmailAddress { get; set; }
-    public EmailType EmailType { get; set; }
     public int ContactId { get; set; }
+
+    [ObservableProperty]
+    private string _emailAddress;
+
+    [ObservableProperty]
+    private EmailType _emailType;
 }
 
 public enum EmailType {

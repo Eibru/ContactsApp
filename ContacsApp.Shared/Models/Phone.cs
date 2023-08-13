@@ -1,10 +1,16 @@
-﻿namespace ContactsApp.Shared.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-public class Phone {
+namespace ContactsApp.Shared.Models;
+
+public partial class Phone : ObservableObject{
     public int Id { get; set; }
-    public string PhoneNumber { get; set; }
-    public PhoneType PhoneType { get; set; }
     public int ContactId { get; set; }
+
+    [ObservableProperty]
+    private string _phoneNumber;
+
+    [ObservableProperty]
+    private PhoneType _phoneType;
 }
 
 public enum PhoneType {
