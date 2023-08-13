@@ -1,6 +1,6 @@
 # Contacts application
 * Backend - ASP.NET Core web API
-* Frontend - Bazor WASM
+* Frontend - Bazor WASM and WPF
 
 ### Showcases
 * Blazor WebAssembly
