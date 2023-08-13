@@ -74,7 +74,19 @@ public partial class ContactViewModel : ObservableObject {
 		OnPropertyChanged(nameof(Contact.PhoneNumbers));
 	}
 
-	private async Task CreateContact() {
+    [RelayCommand]
+    private void RemoveEmail(int id) { //TODO - this does not remove the email
+		var item = Contact.EmailAddresses.First(x => x.Id == id);
+		Contact.EmailAddresses.Remove(item);
+    }
+
+    [RelayCommand]
+    private void RemovePhone(int id) { //TODO - this does not remove the email
+        var item = Contact.PhoneNumbers.First(x => x.Id == id);
+        Contact.PhoneNumbers.Remove(item);
+    }
+
+    private async Task CreateContact() {
 		Loading = true;
 
 		try {
