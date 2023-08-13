@@ -9,3 +9,4 @@
 * REST
 * Entity framework(SQLite)
 * MVVM(CommunityToolkit)
+* WPF
