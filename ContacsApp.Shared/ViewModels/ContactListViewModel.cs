@@ -35,11 +35,6 @@ public partial class ContactListViewModel : ObservableObject {
     }
 
     [RelayCommand]
-    private async Task CreateContact() {
-
-    }
-
-    [RelayCommand]
     private async Task ViewContact(int id) {
         await _navigationService.GoToContact(id);
     }
