@@ -40,8 +40,25 @@ public class ContactsController : ControllerBase {
 
     [HttpPut]
     public async Task<IActionResult> PutAsync(Contact item) {
+        var emails = item.EmailAddresses.ToList();
+        var phones = item.PhoneNumbers.ToList();
+
         _databaseContext.Contacts.Update(item);
         await _databaseContext.SaveChangesAsync();
+
+        var entity = await _databaseContext.Contacts.Include(x => x.EmailAddresses).Include(x => x.PhoneNumbers).FirstAsync(x => x.Id == item.Id);
+
+        var emailsToDelete = entity.EmailAddresses.Where(x => !emails.Any(y => y.Id == x.Id));
+        var phonesToDelete = entity.PhoneNumbers.Where(x => !phones.Any(y => y.Id == x.Id));
+
+        if (emailsToDelete.Any()) 
+            _databaseContext.RemoveRange(emailsToDelete);
+
+        if (phonesToDelete.Any())
+            _databaseContext.RemoveRange(phonesToDelete);
+
+        await _databaseContext.SaveChangesAsync();
+
         return NoContent();
     }
 
