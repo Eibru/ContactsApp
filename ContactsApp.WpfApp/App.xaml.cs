@@ -43,6 +43,8 @@ public partial class App : Application {
         services.AddSingleton<ContactListView>();
         services.AddTransient<ContactView>();
 
+        services.AddSingleton<Wpf.Ui.Mvvm.Contracts.ISnackbarService, Wpf.Ui.Mvvm.Services.SnackbarService>();
+
         //Navigationframe
         services.AddSingleton<Frame>();
     }

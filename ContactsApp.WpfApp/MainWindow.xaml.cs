@@ -25,16 +25,18 @@ namespace ContactsApp.WpfApp;
 public partial class MainWindow {
     private readonly INavigationService _navigationService;
     private readonly IServiceProvider _serviceProvider;
+    private readonly Wpf.Ui.Mvvm.Contracts.ISnackbarService _snackbarService;
 
-    public MainWindow(INavigationService navigationService, IServiceProvider sp, Frame navigationFrame) {
+    public MainWindow(INavigationService navigationService, IServiceProvider sp, Frame navigationFrame, Wpf.Ui.Mvvm.Contracts.ISnackbarService snackbarService) {
         InitializeComponent();
 
         _navigationService = navigationService;
         _serviceProvider = sp;
 
-        //((NavigationService)_navigationService).Frame = frame;
-
         frame.Content = navigationFrame;
+        _snackbarService = snackbarService;
+
+        _snackbarService.SetSnackbarControl(RootSnackbar);
     }
 
     public async void NavigateToContactList(object sender, EventArgs e) {
