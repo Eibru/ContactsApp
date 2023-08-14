@@ -41,7 +41,7 @@ public partial class App : Application {
         services.AddSingleton<IApiClient, ApiClient>();
         services.AddSingleton<MainWindow>();
         services.AddSingleton<ContactListView>();
-        services.AddSingleton<ContactView>();
+        services.AddTransient<ContactView>();
 
         //Navigationframe
         services.AddSingleton<Frame>();

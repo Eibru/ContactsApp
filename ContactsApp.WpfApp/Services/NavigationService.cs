@@ -23,7 +23,9 @@ public class NavigationService : INavigationService {
 
     public async Task GoToContact(int contactId) {
         var contactView = _serviceProvider.GetRequiredService<ContactView>();
-        await ((ContactViewModel)contactView.DataContext).LoadContact(contactId);
+        if(contactId > 0)
+            await ((ContactViewModel)contactView.DataContext).LoadContact(contactId);
+
         _navigationFrame.Navigate(contactView);
     }
 
